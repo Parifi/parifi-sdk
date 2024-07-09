@@ -1,7 +1,14 @@
 import { ethers } from 'ethers';
 import { getParifiSdkInstanceForTesting } from '..';
 import { TEST_MARKET_ID1, TEST_OPEN_POSITION, TEST_POSITION_ID1, TEST_SETTLE_ORDER_ID } from '../common/constants';
-import { DECIMAL_ZERO, OrderStatus, getCurrentTimestampInSeconds, getNormalizedPriceByIdFromPriceIdArray } from '../../src';
+import {
+  DECIMAL_ZERO,
+  OrderStatus,
+  PRECISION_MULTIPLIER,
+  getCurrentTimestampInSeconds,
+  getNormalizedPriceByIdFromPriceIdArray,
+} from '../../src';
+import Decimal from 'decimal.js';
 
 describe('Order Manager tests', () => {
   it('should liquidate a single position', async () => {
@@ -39,7 +46,7 @@ describe('Order Manager tests', () => {
       console.log('Order expired, cannot be settled');
       return;
     }
-  
+
     const priceIds = await parifiSdk.subgraph.getPythPriceIdsForOrderIds(orderIds);
 
     const collateralPriceIds = parifiSdk.pyth.getPriceIdsForCollaterals();
@@ -69,8 +76,12 @@ describe('Order Manager tests', () => {
     const normalizedMarketPrice =
       normalizedPrice.find((p) => p.priceId === market.pyth?.id)?.normalizedPrice ?? DECIMAL_ZERO;
 
-    console.log('normalizedCollateralPrice', normalizedCollateralPrice);
-    console.log('normalizedMarketPrice', normalizedMarketPrice);
+    const positionLeverage = await parifiSdk.core.calculatePositionLeverage(
+      position,
+      market,
+      normalizedMarketPrice ?? DECIMAL_ZERO,
+      normalizedCollateralPrice ?? DECIMAL_ZERO,
+    );
 
     const liquidationPrice = await parifiSdk.core.getLiquidationPrice(
       position,
@@ -78,6 +89,10 @@ describe('Order Manager tests', () => {
       normalizedMarketPrice ?? DECIMAL_ZERO,
       normalizedCollateralPrice ?? DECIMAL_ZERO,
     );
+
+    if (new Decimal(positionLeverage.leverage ?? 0).lessThan(PRECISION_MULTIPLIER)) {
+      expect(liquidationPrice.isZero());
+    }
 
     console.log('liquidationPrice', liquidationPrice);
     if (position.isLong) {

@@ -476,7 +476,7 @@ export const settleOrderUsingGelato = async (
   return { gelatoTaskId: taskId };
 };
 
-// Returns the liquidation price of a Position
+// Returns the liquidation price of a Position, 0 if Liquidation price is not applicable
 // A position is liquidated when the loss of a position in USD goes above the USD value
 // of liquidation threshold times the deposited collateral value
 export const getLiquidationPrice = (
@@ -516,9 +516,25 @@ export const getLiquidationPrice = (
     .times(new Decimal('10').pow(marketDecimals))
     .div(position.positionSize ?? '1');
 
+  let liquidationPrice = DECIMAL_ZERO;
   if (position.isLong) {
-    return new Decimal(position.avgPrice ?? 0).sub(lossPerToken);
+    liquidationPrice = new Decimal(position.avgPrice ?? 0).sub(lossPerToken);
+
+    // For LONG positions, if Liquidation price is less than 0, it means that the leverage is below 1x
+    // and liquidation price is not applicable
+    if (liquidationPrice.lessThan(DECIMAL_ZERO)) {
+      console.log('Leverage less than 1x. LiquidationPrice set to DECIMAL_ZERO');
+      return DECIMAL_ZERO;
+    }
   } else {
-    return new Decimal(position.avgPrice ?? 0).add(lossPerToken);
+    liquidationPrice = new Decimal(position.avgPrice ?? 0).add(lossPerToken);
+
+    // For SHORT positions, if Liquidation price is less than the normalized market price, it means that the leverage is below 1x
+    // and liquidation price is not applicable
+    if (liquidationPrice.lessThan(normalizedMarketPrice)) {
+      console.log('Leverage less than 1x. LiquidationPrice set to DECIMAL_ZERO');
+      return DECIMAL_ZERO;
+    }
   }
+  return liquidationPrice;
 };
