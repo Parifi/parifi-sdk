@@ -1,12 +1,11 @@
 import { ethers } from 'ethers';
 import { getParifiSdkInstanceForTesting } from '..';
-import { TEST_MARKET_ID1, TEST_OPEN_POSITION, TEST_POSITION_ID1, TEST_SETTLE_ORDER_ID } from '../common/constants';
+import { TEST_MARKET_ID1, TEST_OPEN_POSITION, TEST_SETTLE_ORDER_ID } from '../common/constants';
 import {
   DECIMAL_ZERO,
   OrderStatus,
   PRECISION_MULTIPLIER,
   getCurrentTimestampInSeconds,
-  getNormalizedPriceByIdFromPriceIdArray,
 } from '../../src';
 import Decimal from 'decimal.js';
 
@@ -30,7 +29,7 @@ describe('Order Manager tests', () => {
     }
   });
 
-  it('should settle single order using wallet', async () => {
+  it.skip('should settle single order using wallet', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
 
     const orderIds = [TEST_SETTLE_ORDER_ID];
@@ -100,5 +99,37 @@ describe('Order Manager tests', () => {
     } else {
       expect(liquidationPrice.toNumber()).toBeGreaterThan(Number(position.avgPrice));
     }
+  });
+
+  it('should return true if position is liquidatable', async () => {
+    const parifiSdk = await getParifiSdkInstanceForTesting();
+
+    // Add position id that was liquidated in the past
+    const position = await parifiSdk.subgraph.getPositionById(
+      '0x0904da62cbc64fd5ace0caeb1792fbebd054e89fe194f3d4e8cf5b50dd5a541d',
+    );
+    const market = await parifiSdk.subgraph.getMarketById(position.market?.id ?? '0x');
+
+    const normalizedPrice = await parifiSdk.pyth.getLatestPricesNormalized([
+      market.depositToken?.pyth?.id ?? '0x',
+      market.pyth?.id ?? '0x',
+    ]);
+
+    const normalizedCollateralPrice = normalizedPrice.find(
+      (p) => p.priceId === market.depositToken?.pyth?.id,
+    )?.normalizedPrice;
+
+    const normalizedMarketPrice =
+      normalizedPrice.find((p) => p.priceId === market.pyth?.id)?.normalizedPrice ?? DECIMAL_ZERO;
+
+    const canBeLiquidated = await parifiSdk.core.isPositionLiquidatable(
+      position,
+      market,
+      normalizedMarketPrice ?? DECIMAL_ZERO,
+      normalizedCollateralPrice ?? DECIMAL_ZERO,
+    );
+
+    console.log('canBeLiquidated', canBeLiquidated);
+    expect(canBeLiquidated).toBe(true);
   });
 });

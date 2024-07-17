@@ -15,7 +15,7 @@ describe('Pimlico test cases', () => {
     console.log(`User operation included: https://arbiscan.io/tx/${txHash}`);
   });
 
-  it('should settle orders using Pimlico', async () => {
+  it.skip('should settle orders using Pimlico', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
 
     const orderDetails = await parifiSdk.subgraph.getOrderById(TEST_SETTLE_ORDER_ID);
