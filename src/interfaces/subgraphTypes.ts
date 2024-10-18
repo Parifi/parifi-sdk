@@ -293,7 +293,7 @@ export interface PythPrice {
 // Interface for response received for Pyth Price data
 export interface PythPriceResponse {
   // Pyth Price ID
-  id?: string;
+  id: string;
 
   price: PythPrice;
 
@@ -340,3 +340,48 @@ export interface BatchExecute {
   id: string;
   priceUpdateData: string[];
 }
+
+export interface collateralDepositsPortfolioData {
+  depositedAmount: string;
+  collateralSymbol: string;
+  collateralName: string;
+  collateralDecimals: string;
+}
+
+export interface positionsPortolfio {
+  status: string;
+  market: {
+    marketSymbol: string;
+  };
+  positionSize: string;
+  avgPrice: string;
+  realizedPnl: string;
+  realizedFee: string;
+}
+
+export interface PortfolioWallet {
+  id: string; // Wallet ID
+  snxAccounts: Array<{
+    collateralDeposits: collateralDepositsPortfolioData[];
+    positions: positionsPortolfio[];
+  }>;
+}
+export interface PorfolioDataSubgraph {
+  wallets: PortfolioWallet[]; // Array of Wallet objects
+}
+
+export type PriceObject = {
+  id: string;
+  price: {
+    price: string;
+    conf: string;
+    expo: number;
+    publish_time: number;
+  };
+  ema_price: {
+    price: string;
+    conf: string;
+    expo: number;
+    publish_time: number;
+  };
+};
