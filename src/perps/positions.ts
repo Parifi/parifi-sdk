@@ -1,6 +1,5 @@
-import Decimal from 'decimal.js';
-import { Position } from '../interfaces/sdkTypes';
-import { formatEther } from 'ethers';
+import Decimal from "decimal.js";
+import { Position } from "../interfaces/sdkTypes";
 
 export const getProfitOrLossInUsd = (
   positionData: Position,
@@ -12,28 +11,22 @@ export const getProfitOrLossInUsd = (
   const positionAvgPrice = new Decimal(avgPrice).div(Decimal.pow(10, marketDecimals));
   const positionSizeDecimal = new Decimal(Math.abs(Number(positionSize))).abs().div(Decimal.pow(10, marketDecimals));
   if (isLong) {
-    // If long, profit when market price > avg price
-    if (normalizedMarketPrice.gt(positionAvgPrice)) {
-      profitOrLoss = normalizedMarketPrice.minus(positionAvgPrice);
-    } else {
-      profitOrLoss = positionAvgPrice.minus(normalizedMarketPrice);
-      profitOrLoss.times(-1);
-    }
+    // If long, profit when market price > avg price, loss when market price < avg price
+    profitOrLoss = normalizedMarketPrice.minus(positionAvgPrice);
   } else {
-    // If short, profit when market price < avg price
-    if (normalizedMarketPrice.gt(positionAvgPrice)) {
-      profitOrLoss = normalizedMarketPrice.minus(positionAvgPrice);
-    } else {
-      profitOrLoss = positionAvgPrice.minus(normalizedMarketPrice);
-      profitOrLoss.times(-1);
-    }
+    // If short, profit when market price < avg price, loss when market price > avg price
+    profitOrLoss = positionAvgPrice.minus(normalizedMarketPrice);
+  }
+
+  // Adjust the sign for short positions (profit is positive when market price is lower)
+  if (!isLong) {
+    profitOrLoss = profitOrLoss.times(new Decimal(-1));
   }
 
   const totalProfitOrLoss = positionSizeDecimal.times(profitOrLoss);
 
   return { totalProfitOrLoss };
 };
-
 export const calculatePositionLeverage = ({
   collateralAmount,
   size,
@@ -62,3 +55,4 @@ export const calculatePositionLeverage = ({
 
   return { positionLeverage: new Decimal(0) };
 };
+

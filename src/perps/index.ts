@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { calculatePositionLeverage, getProfitOrLossInUsd } from './positions';
+import {  calculatePositionLeverage, getProfitOrLossInUsd } from './positions';
 import { Position } from '../interfaces/sdkTypes';
 
 export class Perps {
