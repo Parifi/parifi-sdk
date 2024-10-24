@@ -9,6 +9,7 @@ import {
 } from './subgraphQueries';
 import {
   mapDespositCollateralArrayToInterface,
+  mapOrderArrayToPriceid,
   mapOrdersArrayToInterface,
   mapSingleOrderToInterface,
 } from '../../common/subgraphMapper';
@@ -110,21 +111,10 @@ export const getOrderById = async (subgraphEndpoint: string, orderId: string): P
 // Get all price IDs of tokens related to the orders ids
 export const getPythPriceIdsForOrderIds = async (subgraphEndpoint: string, orderIds: string[]): Promise<string[]> => {
   try {
-    const formattedOrderIds: string[] = orderIds;
-    let subgraphResponse: any = await request(subgraphEndpoint, fetchPriceIdsFromOrderIdsQuery(formattedOrderIds));
+    let subgraphResponse: any = await request(subgraphEndpoint, fetchPriceIdsFromOrderIdsQuery(orderIds));
     if (!subgraphResponse) throw new Error('Error While Fechting Pyth Price Ids For Order Ids');
-    const priceIds: string[] = [];
-
-    const orders: Order[] = mapOrdersArrayToInterface(subgraphResponse, {}) || [];
-    if (orders.length != 0) {
-      orders.map((order) => {
-        if (order.market?.feedId) {
-          priceIds.push(order.market?.feedId);
-        }
-      });
-    }
+    const priceIds: string[] = mapOrderArrayToPriceid(subgraphResponse) || [];
     const uniquePriceIds = getUniqueValuesFromArray(priceIds);
-
     // Remove empty (0x00) price ids for orders where the Pyth data is not set
     return uniquePriceIds.filter((id) => id !== EMPTY_BYTES32);
   } catch (error) {

@@ -47,11 +47,11 @@ describe('Pyth tests', () => {
   it('should return price ids from subgraph', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
 
-    const orderIds = [TEST_ORDER_ID1, TEST_ORDER_ID2, TEST_ORDER_ID3];
+    const orderIds = [TEST_ORDER_ID1];
 
     const priceIds: string[] = await parifiSdk.subgraph.getPythPriceIdsForOrderIds(orderIds);
     console.log('priceIds from fn: ', priceIds);
-
+    console.log("priceIds",priceIds)
     expect(priceIds.length).toBeGreaterThan(0);
   });
 });

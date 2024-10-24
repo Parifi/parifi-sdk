@@ -50,11 +50,11 @@
     "@parifi/synthetix-sdk-ts": "^0.2.10-dev",
     "axios": "^1.6.7",
     "decimal.js": "^10.4.3",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.5",
     "ethers": "^6.10.0",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
-    "permissionless": "^0.1.16",
+    "permissionless": "0.1.16",
     "viem": "^2.9.17"
   }
 }

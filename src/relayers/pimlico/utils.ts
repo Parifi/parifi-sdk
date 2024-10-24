@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import { arbitrum } from 'viem/chains';
-import { appendFileSync } from 'fs';
 import { ENTRYPOINT_ADDRESS_V07, SmartAccountClient, createSmartAccountClient } from 'permissionless';
 import { RelayerI, RpcConfig } from '../../interfaces';
 import { SmartAccount, privateKeyToSimpleSmartAccount } from 'permissionless/accounts';

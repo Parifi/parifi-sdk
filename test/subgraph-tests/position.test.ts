@@ -1,10 +1,10 @@
 import { getParifiSdkInstanceForTesting } from '..';
-import { status, TEST_POSITION_ID1, TEST_USER_SNX_ID1 } from '../common/constants';
+import { status, TEST_POSITION_ID1, TEST_USER_ADDRESS, TEST_USER_ADDRESS_CLOSED_POS } from '../common/constants';
 
 describe('Order fetching logic from subgraph', () => {
   it('should return correct user position details', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
-    const userAddress = TEST_USER_SNX_ID1;
+    const userAddress = TEST_USER_ADDRESS;
     const orderData = await parifiSdk.subgraph.getOpenPositionsByUserAddress(userAddress, 100, 0);
     expect(orderData[0]?.user?.id).toBe(userAddress);
   });
@@ -18,7 +18,7 @@ describe('Order fetching logic from subgraph', () => {
   });
 
   it('should return position details by User address', async () => {
-    const userAddress = TEST_USER_SNX_ID1;
+    const userAddress = TEST_USER_ADDRESS_CLOSED_POS;
     const parifiSdk = await getParifiSdkInstanceForTesting();
     const position = await parifiSdk.subgraph.getClosedPositionsByUserAddress(userAddress);
     expect(position[0]?.user?.id).toBe(userAddress);

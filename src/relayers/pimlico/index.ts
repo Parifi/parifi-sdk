@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { RelayerConfig, RpcConfig, SubgraphConfig } from '../../interfaces';
-import { executeBatchTxsUsingPimlico, executeTxUsingPimlico, getPimlicoSmartAccountClient } from './utils';
+import {  executeTxUsingPimlico, getPimlicoSmartAccountClient } from './utils';
 import { SmartAccount } from 'permissionless/accounts';
 import { Chain, Hex, Transport } from 'viem';
 import { EntryPoint } from 'permissionless/types/entrypoint';

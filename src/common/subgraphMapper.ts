@@ -151,7 +151,19 @@ export const mapOrdersArrayToInterface = (
     throw error;
   }
 };
-
+export const mapOrderArrayToPriceid = (response:any) =>{
+  if (response === null) return undefined;
+  try {
+    return response.orders.map((order: Order) => {
+      return  {
+        priceIds :order.market?.feedId
+      }
+    });
+  } catch (error) {
+    console.log('Error while mapping data', error);
+    throw error;
+  }
+}
 export const mapDespositCollateralArrayToInterface = (response: any): DepositCollateral[] | undefined => {
   if (response === null) return undefined;
   try {
