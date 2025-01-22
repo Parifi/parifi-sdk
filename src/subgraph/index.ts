@@ -19,6 +19,8 @@ import { PriceObject, SnxAccount } from '../interfaces';
 import { getProtocolStats } from './protocol';
 import { getAllOrdersByUserAddress, getOrderById } from './orders';
 import {
+  getAllOpenPositionsWithTime,
+  getAllPositionHistoryWithTime,
   getAllPositionsByUserAddress,
   getClosedPositionsByUserAddress,
   getLiquidatedPositionsByUserAddress,
@@ -220,6 +222,28 @@ export class Subgraph {
   public async getUserPositionsBySnxAccount(snxAccountId: string): Promise<SnxAccount | undefined> {
     const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
     return await getUserPositionsBySnxAccount(subgraphEndpoint, snxAccountId);
+  }
+
+  // Get all closed/liquidated positions with time filter
+  public async getAllPositionHistoryWithTime(
+    startTime: number,
+    endTime: number,
+    count: number = 100,
+    skip: number = 0,
+  ): Promise<SnxAccount[]> {
+    const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
+    return await getAllPositionHistoryWithTime(subgraphEndpoint, startTime, endTime, count, skip);
+  }
+
+  // Get all open positions with time filter
+  public async getAllOpenPositionsWithTime(
+    startTime: number,
+    endTime: number,
+    count: number = 10,
+    skip: number = 0,
+  ): Promise<SnxAccount[]> {
+    const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
+    return await getAllOpenPositionsWithTime(subgraphEndpoint, startTime, endTime, count, skip);
   }
 
   ////////////////////////////////////////////////////////////////

@@ -399,3 +399,136 @@ export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
     }
     }
   }`;
+
+// Fetches positions for a user address by status
+export const fetchAllOpenPositionsWithTime = (
+  startTimestamp: number,
+  endTimestamp: number,
+  count: number = 20,
+  skip: number = 0,
+) =>
+  gql`
+    {
+    snxAccounts(
+      first: ${count}
+      skip: ${skip}
+      where: {
+        type: PERP,
+        positions_: {
+          status: OPEN,
+          createdTimestamp_gte: ${startTimestamp}
+          createdTimestamp_lte: ${endTimestamp}
+          }
+      }
+    ) {
+      id
+      accountId
+      owner {
+        id
+      }
+      collateralDeposits {
+        id
+        collateralName
+        collateralSymbol
+        collateralDecimals
+        collateralAddress
+        currentDepositedAmount
+        totalAmountDeposited
+        totalAmountWithdrawn
+        totalAmountLiquidated
+      }
+      positions {
+        id
+        market {
+          id
+          marketName
+          marketSymbol
+          feedId
+        }
+        positionSize
+        positionCollateral
+        avgPrice
+        avgPriceDec
+        isLong
+        createdTimestamp
+        status
+        txHash
+        liquidationTxHash
+        closingPrice
+        realizedPnl
+        realizedFee
+        netRealizedPnl
+        createdTimestamp
+        lastRefresh
+        lastRefreshISO
+        canBeLiquidated
+    }
+    }
+  }`;
+
+
+// Fetches positions for a user address by status
+export const fetchAllPositionHistoryWithTime = (
+  startTimestamp: number,
+  endTimestamp: number,
+  count: number = 20,
+  skip: number = 0,
+) =>
+  gql`
+    {
+    snxAccounts(
+      first: ${count}
+      skip: ${skip}
+      where: {
+        type: PERP,
+        positions_: {
+          status_in: [CLOSED, LIQUIDATED],
+          createdTimestamp_gte: ${startTimestamp}
+          createdTimestamp_lte: ${endTimestamp}
+          }
+      }
+    ) {
+      id
+      accountId
+      owner {
+        id
+      }
+      collateralDeposits {
+        id
+        collateralName
+        collateralSymbol
+        collateralDecimals
+        collateralAddress
+        currentDepositedAmount
+        totalAmountDeposited
+        totalAmountWithdrawn
+        totalAmountLiquidated
+      }
+      positions {
+        id
+        market {
+          id
+          marketName
+          marketSymbol
+          feedId
+        }
+        positionSize
+        positionCollateral
+        avgPrice
+        avgPriceDec
+        isLong
+        createdTimestamp
+        status
+        txHash
+        liquidationTxHash
+        closingPrice
+        realizedPnl
+        realizedFee
+        netRealizedPnl
+        createdTimestamp
+        lastRefresh
+        lastRefreshISO
+        canBeLiquidated
+    }
+    }
+  }`;

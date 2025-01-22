@@ -1,5 +1,7 @@
 import { request } from 'graphql-request';
 import {
+  fetchAllOpenPositionsWithTime,
+  fetchAllPositionHistoryWithTime,
   fetchPositionByIdQuery,
   fetchPositionsBySnxAccount,
   fetchPositionsByUserQuery,
@@ -126,7 +128,7 @@ export const getUserPositionsHistory = async (
   }
 };
 
-// Get all positions by user address
+// Get positions history by user address
 export const getUserPositionHistoryWithTime = async (
   subgraphEndpoint: string,
   userAddress: string,
@@ -148,7 +150,7 @@ export const getUserPositionHistoryWithTime = async (
   }
 };
 
-// Get open positions by user address
+// Get all open positions by user address
 export const getUserOpenPositionsWithTime = async (
   subgraphEndpoint: string,
   userAddress: string,
@@ -170,7 +172,7 @@ export const getUserOpenPositionsWithTime = async (
   }
 };
 
-// Get positions by SNX Account id 
+// Get positions by SNX Account id
 export const getUserPositionsBySnxAccount = async (
   subgraphEndpoint: string,
   snxAccountId: string,
@@ -186,5 +188,47 @@ export const getUserPositionsBySnxAccount = async (
   } catch (error) {
     console.error('Error fetching positions:', error);
     return undefined;
+  }
+};
+
+// Get all open positions for all users
+export const getAllOpenPositionsWithTime = async (
+  subgraphEndpoint: string,
+  startTime: number,
+  endTime: number,
+  count: number = 10,
+  skip: number = 0,
+): Promise<SnxAccount[]> => {
+  try {
+    const subgraphResponse: any = await request(
+      subgraphEndpoint,
+      fetchAllOpenPositionsWithTime(startTime, endTime, count, skip),
+    );
+    const snxAccounts = mapResponseToSnxAccountArray(subgraphResponse?.snxAccounts);
+    return snxAccounts ?? [];
+  } catch (error) {
+    console.error('Error fetching positions:', error);
+    return [];
+  }
+};
+
+// Get positions history by user address
+export const getAllPositionHistoryWithTime = async (
+  subgraphEndpoint: string,
+  startTime: number,
+  endTime: number,
+  count: number = 100,
+  skip: number = 0,
+): Promise<SnxAccount[]> => {
+  try {
+    const subgraphResponse: any = await request(
+      subgraphEndpoint,
+      fetchAllPositionHistoryWithTime(startTime, endTime, count, skip),
+    );
+    const snxAccounts = mapResponseToSnxAccountArray(subgraphResponse?.snxAccounts);
+    return snxAccounts ?? [];
+  } catch (error) {
+    console.error('Error fetching positions:', error);
+    return [];
   }
 };
