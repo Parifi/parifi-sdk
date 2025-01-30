@@ -2,6 +2,7 @@ import Decimal from 'decimal.js';
 import { request } from 'graphql-request';
 import {
   checkExistingUser,
+  depositedCollateralForSnxAccountsQuery,
   fetchAccountByWalletAddress,
   fetchIntegratorFees,
   fetchLeaderboardUserData,
@@ -9,7 +10,12 @@ import {
   fetchRealizedPnlData,
 } from './subgraphQueries';
 import { convertWeiToEther, DECIMAL_ZERO } from '../../common';
-import { LeaderboardUserData, UserPortfolioData } from '../../interfaces/sdkTypes';
+import { CollateralDeposit, LeaderboardUserData, UserPortfolioData } from '../../interfaces/sdkTypes';
+
+interface depositedCollateralAccountIdResponse {
+  accountId: string;
+  collateralDeposits: CollateralDeposit[];
+}
 
 /// Returns the Realized PNL for positions and vaults for a user address
 export const getRealizedPnlForUser = async (
@@ -248,4 +254,11 @@ export const checkIfExistingUser = async (subgraphEndpoint: string, userAddress:
   }
 
   return isExisting;
+};
+
+export const depositedCollateralForSnxAccounts = async (subgraphEndpoint: string, accountIds: string[]) => {
+  const subgraphResponse: any = await request(subgraphEndpoint, depositedCollateralForSnxAccountsQuery(accountIds));
+  if (!subgraphResponse) throw new Error('Error while fetching account data');
+  const snxAccounts: depositedCollateralAccountIdResponse[] = subgraphResponse?.snxAccounts;
+  return snxAccounts;
 };
