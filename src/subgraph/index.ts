@@ -9,6 +9,7 @@ import { Pyth } from '../pyth';
 import Decimal from 'decimal.js';
 import {
   checkIfExistingUser,
+  depositedCollateralForSnxAccounts,
   getAccountByAddress,
   getFeesByAddress,
   getLeaderboardUserData,
@@ -117,6 +118,11 @@ export class Subgraph {
   public async checkIfExistingUser(userAddress: string) {
     const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
     return await checkIfExistingUser(subgraphEndpoint, userAddress);
+  }
+
+  public async depositedCollateralForSnxAccounts(accountIds: string[]) {
+    const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
+    return await depositedCollateralForSnxAccounts(subgraphEndpoint, accountIds);
   }
 
   public transformPriceArray(priceArray: PriceObject[]): { id: string; price: number }[] {

@@ -164,3 +164,23 @@ export const checkExistingUser = (userAddress: string) => gql`
   }
 }
 `;
+
+export const depositedCollateralForSnxAccountsQuery = (accountIds: string[]) => gql`
+{
+  snxAccounts
+  (where :{
+    accountId_in : [${accountIds.map((id) => `"${id}"`).join(', ')}]
+  })
+  {
+    accountId
+    collateralDeposits{
+      totalAmountDeposited
+      totalAmountWithdrawn
+      totalAmountLiquidated
+      collateralName
+      collateralSymbol
+      collateralDecimals
+    }
+  }
+}
+`;
