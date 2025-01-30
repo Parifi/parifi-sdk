@@ -12,7 +12,7 @@ import {
 import { convertWeiToEther, DECIMAL_ZERO } from '../../common';
 import { CollateralDeposit, LeaderboardUserData, UserPortfolioData } from '../../interfaces/sdkTypes';
 
-interface depositedCollateralAccountIdResponse {
+export interface depositedCollateralAccountIdResponse {
   accountId: string;
   collateralDeposits: CollateralDeposit[];
 }
