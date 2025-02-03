@@ -171,9 +171,12 @@ export const depositedCollateralForSnxAccountsQuery = (accountIds: string[]) => 
   (where :{
     accountId_in : [${accountIds.map((id) => `"${id}"`).join(', ')}]
   })
-  {
+ {
+    owner{
+      id
+    }
     accountId
-    collateralDeposits{
+    collateralDeposits {
       totalAmountDeposited
       totalAmountWithdrawn
       totalAmountLiquidated

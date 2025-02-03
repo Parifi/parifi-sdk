@@ -13,6 +13,9 @@ import { convertWeiToEther, DECIMAL_ZERO } from '../../common';
 import { CollateralDeposit, LeaderboardUserData, UserPortfolioData } from '../../interfaces/sdkTypes';
 
 export interface depositedCollateralAccountIdResponse {
+  owner: {
+    id: string;
+  };
   accountId: string;
   collateralDeposits: CollateralDeposit[];
 }
