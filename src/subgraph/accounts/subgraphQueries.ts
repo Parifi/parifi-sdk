@@ -180,6 +180,7 @@ export const depositedCollateralForSnxAccountsQuery = (accountIds: string[]) => 
       totalAmountDeposited
       totalAmountWithdrawn
       totalAmountLiquidated
+      currentDepositedAmount
       collateralName
       collateralSymbol
       collateralDecimals
