@@ -22,4 +22,13 @@ describe('Account data fetching logic from subgraph', () => {
     expect(await parifiSdk.subgraph.checkIfExistingUser(newUserAddress)).toBe(false);
     expect(await parifiSdk.subgraph.checkIfExistingUser(existingUserAddress)).toBe(true);
   });
+
+  it.only('should return correct collateral deposits for accountId', async () => {
+    const parifiSdk = await getParifiSdkInstanceForTesting();
+    const accountIds = ['4419558961993983236', '11008871937430344025', '16131201045014071399'];
+
+    const response = await parifiSdk.subgraph.depositedCollateralForSnxAccounts(accountIds);
+    console.log('---------', JSON.stringify(response));
+    expect(response.length).toEqual(accountIds.length);
+  });
 });
