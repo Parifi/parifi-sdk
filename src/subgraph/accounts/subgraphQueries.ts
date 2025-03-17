@@ -104,6 +104,7 @@ export const fetchTopAccountsByReferralFees = (count: number = 20, skip: number 
     unclaimedReferralRewardsWeth
   }
 }`;
+
 export const fetchAccountByWalletAddress = (walletAddress: string) =>
   gql`
   {

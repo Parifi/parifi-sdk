@@ -7,7 +7,7 @@ export const fetchPositionsByUserQuery = (userAddress: string, count: number = 2
     snxAccounts(
       first: ${count}
       skip: ${skip}
-      where: { owner: "${userAddress}", type: PERP, positions_: {status_in: [OPEN, CLOSED, LIQUIDATED]} }) {
+      where: { owner: "${userAddress}", type: PERP }) {
       id
       accountId
       owner {
@@ -24,7 +24,7 @@ export const fetchPositionsByUserQuery = (userAddress: string, count: number = 2
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions(where: {status_in: [OPEN, CLOSED, LIQUIDATED]}) {
         id
         market {
           id
@@ -33,7 +33,6 @@ export const fetchPositionsByUserQuery = (userAddress: string, count: number = 2
           feedId
         }
         positionSize
-        # positionCollateral
         avgPrice
         avgPriceDec
         isLong
@@ -44,8 +43,7 @@ export const fetchPositionsByUserQuery = (userAddress: string, count: number = 2
         closingPrice
         realizedPositionPnl
         realizedPnlAfterFees
-        # realizedFee
-        # netRealizedPnl
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
@@ -66,7 +64,7 @@ export const fetchPositionsByUserQueryAndStatus = (
     snxAccounts(
       first: ${count}
       skip: ${skip}
-      where: { owner: "${userAddress}", type: PERP, positions_: {status: "${status}"} }
+      where: { owner: "${userAddress}", type: PERP }
     ) {
       id
       accountId
@@ -84,7 +82,7 @@ export const fetchPositionsByUserQueryAndStatus = (
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions(where: {status: ${status} }) {
         id
         market {
           id
@@ -93,7 +91,6 @@ export const fetchPositionsByUserQueryAndStatus = (
           feedId
         }
         positionSize
-        # positionCollateral
         avgPrice
         avgPriceDec
         isLong
@@ -104,8 +101,7 @@ export const fetchPositionsByUserQueryAndStatus = (
         closingPrice
         realizedPositionPnl
         realizedPnlAfterFees
-        # realizedFee
-        # netRealizedPnl
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
@@ -121,7 +117,7 @@ export const fetchUserPositionHistory = (userAddress: string, count: number = 20
     snxAccounts(
       first: ${count}
       skip: ${skip}
-      where: { owner: "${userAddress}", type: PERP, positions_: {status_in: [CLOSED, LIQUIDATED]} }
+      where: { owner: "${userAddress}", type: PERP }
     ) {
       id
       accountId
@@ -139,7 +135,7 @@ export const fetchUserPositionHistory = (userAddress: string, count: number = 20
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions(where: {status_in: [CLOSED, LIQUIDATED]}) {
         id
         market {
           id
@@ -148,7 +144,6 @@ export const fetchUserPositionHistory = (userAddress: string, count: number = 20
           feedId
         }
         positionSize
-        # positionCollateral
         avgPrice
         avgPriceDec
         isLong
@@ -159,8 +154,7 @@ export const fetchUserPositionHistory = (userAddress: string, count: number = 20
         closingPrice
         realizedPositionPnl
         realizedPnlAfterFees
-        # realizedFee
-        # netRealizedPnl
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
@@ -187,7 +181,6 @@ export const fetchPositionByIdQuery = (positionId: string) =>
               accountId
             }
             isLong
-            # positionCollateral
             positionSize
             avgPrice
             avgPriceDec
@@ -197,8 +190,7 @@ export const fetchPositionByIdQuery = (positionId: string) =>
             closingPrice
             realizedPositionPnl
             realizedPnlAfterFees
-            # realizedFee
-            # netRealizedPnl
+            totalFeesPaid
             createdTimestamp
             lastRefresh
             lastRefreshISO
@@ -229,12 +221,7 @@ export const fetchUserPositionHistoryWithTime = (
       skip: ${skip}
       where: {
         owner: "${userAddress}",
-        type: PERP,
-        positions_: {
-          status_in: [CLOSED, LIQUIDATED],
-          createdTimestamp_gte: ${startTimestamp}
-          createdTimestamp_lte: ${endTimestamp}
-          }
+        type: PERP
       }
     ) {
       id
@@ -253,7 +240,11 @@ export const fetchUserPositionHistoryWithTime = (
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions( where: {
+          status_in: [CLOSED, LIQUIDATED],
+          createdTimestamp_gte: ${startTimestamp}
+          createdTimestamp_lte: ${endTimestamp}
+      }) {
         id
         market {
           id
@@ -271,9 +262,9 @@ export const fetchUserPositionHistoryWithTime = (
         txHash
         liquidationTxHash
         closingPrice
-        realizedPnl
-        realizedFee
-        netRealizedPnl
+        realizedPositionPnl
+        realizedPnlAfterFees
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
@@ -339,9 +330,9 @@ export const fetchUserOpenPositionsWithTime = (
         txHash
         liquidationTxHash
         closingPrice
-        realizedPnl
-        realizedFee
-        netRealizedPnl
+        realizedPositionPnl
+        realizedPnlAfterFees
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
@@ -389,9 +380,9 @@ export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
         txHash
         liquidationTxHash
         closingPrice
-        realizedPnl
-        realizedFee
-        netRealizedPnl
+        realizedPositionPnl
+        realizedPnlAfterFees
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
@@ -412,14 +403,7 @@ export const fetchAllOpenPositionsWithTime = (
     snxAccounts(
       first: ${count}
       skip: ${skip}
-      where: {
-        type: PERP,
-        positions_: {
-          status: OPEN,
-          createdTimestamp_gte: ${startTimestamp}
-          createdTimestamp_lte: ${endTimestamp}
-          }
-      }
+      where: { type: PERP }
     ) {
       id
       accountId
@@ -437,7 +421,12 @@ export const fetchAllOpenPositionsWithTime = (
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions(where: {
+          status: OPEN,
+          createdTimestamp_gte: ${startTimestamp}
+          createdTimestamp_lte: ${endTimestamp}
+          }) 
+      {
         id
         market {
           id
@@ -455,9 +444,9 @@ export const fetchAllOpenPositionsWithTime = (
         txHash
         liquidationTxHash
         closingPrice
-        realizedPnl
-        realizedFee
-        netRealizedPnl
+        realizedPositionPnl
+        realizedPnlAfterFees
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
@@ -465,7 +454,6 @@ export const fetchAllOpenPositionsWithTime = (
     }
     }
   }`;
-
 
 // Fetches positions for a user address by status
 export const fetchAllPositionHistoryWithTime = (
@@ -480,12 +468,7 @@ export const fetchAllPositionHistoryWithTime = (
       first: ${count}
       skip: ${skip}
       where: {
-        type: PERP,
-        positions_: {
-          status_in: [CLOSED, LIQUIDATED],
-          createdTimestamp_gte: ${startTimestamp}
-          createdTimestamp_lte: ${endTimestamp}
-          }
+        type: PERP
       }
     ) {
       id
@@ -504,7 +487,11 @@ export const fetchAllPositionHistoryWithTime = (
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions(where: {
+          status_in: [CLOSED, LIQUIDATED],
+          createdTimestamp_gte: ${startTimestamp}
+          createdTimestamp_lte: ${endTimestamp}
+      }) {
         id
         market {
           id
@@ -522,9 +509,9 @@ export const fetchAllPositionHistoryWithTime = (
         txHash
         liquidationTxHash
         closingPrice
-        realizedPnl
-        realizedFee
-        netRealizedPnl
+        realizedPositionPnl
+        realizedPnlAfterFees
+        totalFeesPaid
         createdTimestamp
         lastRefresh
         lastRefreshISO
