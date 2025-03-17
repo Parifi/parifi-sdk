@@ -27,4 +27,13 @@ describe('Position fetching logic from subgraph', () => {
       expect(positionData?.id).toEqual(snxAccountId);
     }
   });
+
+  it.only('should return only closed positions for a snx account id', async () => {
+    const parifiSdk = await getParifiSdkInstanceForTesting();
+    const ownerAddress = '0x93a6cf9c7f23624d67356b637eb69345006412e0';
+
+    const positionData = await parifiSdk.subgraph.getOpenPositionsByUserAddress(ownerAddress);
+    console.log('Position data:::', positionData);
+    expect(positionData.length).toEqual(2);
+  });
 });

@@ -6,7 +6,7 @@ export const getParifiSdkInstanceForTesting = async (): Promise<ParifiSdk> => {
   const chain = Chain.ARBITRUM_MAINNET;
   const rpcConfig: RpcConfig = {
     chainId: chain,
-    rpcEndpointUrl: process.env.RPC_ARBITRUM,
+    rpcEndpointUrl: process.env.RPC_URL,
   };
 
   const subgraphConfig: SubgraphConfig = {
