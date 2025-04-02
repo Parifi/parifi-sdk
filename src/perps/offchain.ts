@@ -59,3 +59,38 @@ export const getPriceFromPriceArray = (
   console.log('price: ', priceId, price);
   return price;
 };
+
+/**
+ * Calculates the liquidation price for a position
+ * @param availableMarginInUsd USD value of the margin that is available
+ * @param marginBufferInUsd Margin used as buffer for the account
+ * @param formattedPositionSize Formatted position size
+ * @param formattedMarketPrice Formatted market price of the market
+ * @returns liquidationPrice Approximate liquidation price of the asset
+ */
+export const calculateLiquidationPriceOffchain = ({
+  availableMarginInUsd,
+  marginBufferInUsd,
+  formattedPositionSize,
+  formattedMarketPrice,
+}: {
+  availableMarginInUsd: number;
+  marginBufferInUsd: number;
+  formattedPositionSize: number;
+  formattedMarketPrice: number;
+}): number => {
+  // For invalid position, return current market price
+  if (formattedPositionSize == 0) return formattedMarketPrice;
+  if (availableMarginInUsd == 0) return 0;
+
+  const lossPerToken = Math.abs((marginBufferInUsd - availableMarginInUsd) / formattedPositionSize);
+
+  let liquidationPrice;
+  if (formattedPositionSize > 0) {
+    liquidationPrice = formattedMarketPrice - lossPerToken;
+  } else {
+    liquidationPrice = formattedMarketPrice + lossPerToken;
+  }
+
+  return liquidationPrice;
+};

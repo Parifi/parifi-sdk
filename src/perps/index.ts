@@ -8,6 +8,7 @@ import {
 import { CollateralDeposit, Position } from '../interfaces';
 import { collateralMappingWithRegularSymbol, convertWeiToEther, DECIMAL_ZERO, SYMBOL_TO_PYTH_FEED } from '../common';
 import {
+  calculateLiquidationPriceOffchain,
   calculateUnrealizedPnlForPositions,
   calculateUsdValueOfCollateralDeposits,
   getPriceFromPriceArray,
@@ -76,5 +77,25 @@ export class Perps {
     tokenSymbol?: string | undefined,
   ): number => {
     return getPriceFromPriceArray(priceData, priceId, tokenSymbol);
+  };
+
+  //   Calculates the liquidation price for a position
+  calculateLiquidationPriceOffchain = ({
+    availableMarginInUsd,
+    marginBufferInUsd,
+    formattedPositionSize,
+    formattedMarketPrice,
+  }: {
+    availableMarginInUsd: number;
+    marginBufferInUsd: number;
+    formattedPositionSize: number;
+    formattedMarketPrice: number;
+  }): number => {
+    return calculateLiquidationPriceOffchain({
+      availableMarginInUsd,
+      marginBufferInUsd,
+      formattedPositionSize,
+      formattedMarketPrice,
+    });
   };
 }
