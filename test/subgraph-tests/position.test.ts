@@ -46,8 +46,8 @@ describe('Position fetching logic from subgraph', () => {
   });
   it.only('should return only closed positions of this timeframe', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
-    const startTime = 1735689600;
-    const endTime = 2035689600;
+    const startTime = 1743710952;
+    const endTime = 1743763152;
     const positionData = await parifiSdk.subgraph.getAllPositionHistoryWithTime(startTime, endTime);
     console.log('Position data:::', positionData);
     expect(positionData.length).toEqual(6);
