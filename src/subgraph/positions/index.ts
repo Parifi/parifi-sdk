@@ -204,6 +204,7 @@ export const getAllOpenPositionsWithTime = async (
       subgraphEndpoint,
       fetchAllOpenPositionsWithTime(startTime, endTime, count, skip),
     );
+    console.log('subgraphresponse', subgraphResponse);
     const snxAccounts = mapResponseToSnxAccountArray(subgraphResponse?.snxAccounts);
     return snxAccounts ?? [];
   } catch (error) {

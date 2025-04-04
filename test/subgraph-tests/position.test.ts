@@ -28,12 +28,28 @@ describe('Position fetching logic from subgraph', () => {
     }
   });
 
-  it.only('should return only closed positions for a snx account id', async () => {
+  it('should return only closed positions for a snx account id', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
     const ownerAddress = '0x93a6cf9c7f23624d67356b637eb69345006412e0';
 
     const positionData = await parifiSdk.subgraph.getOpenPositionsByUserAddress(ownerAddress);
     console.log('Position data:::', positionData);
     expect(positionData.length).toEqual(2);
+  });
+  it('should return only open positions of this timeframe', async () => {
+    const parifiSdk = await getParifiSdkInstanceForTesting();
+    const startTime = 1735689600;
+    const endTime = 2035689600;
+    const positionData = await parifiSdk.subgraph.getAllOpenPositionsWithTime(startTime, endTime);
+    console.log('Position data:::', positionData);
+    expect(positionData.length).toEqual(6);
+  });
+  it.only('should return only closed positions of this timeframe', async () => {
+    const parifiSdk = await getParifiSdkInstanceForTesting();
+    const startTime = 1735689600;
+    const endTime = 2035689600;
+    const positionData = await parifiSdk.subgraph.getAllPositionHistoryWithTime(startTime, endTime);
+    console.log('Position data:::', positionData);
+    expect(positionData.length).toEqual(6);
   });
 });
