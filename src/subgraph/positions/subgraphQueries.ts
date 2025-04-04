@@ -321,7 +321,6 @@ export const fetchUserOpenPositionsWithTime = (
           feedId
         }
         positionSize
-        positionCollateral
         avgPrice
         avgPriceDec
         isLong
@@ -371,7 +370,6 @@ export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
           feedId
         }
         positionSize
-        positionCollateral
         avgPrice
         avgPriceDec
         isLong
@@ -403,7 +401,10 @@ export const fetchAllOpenPositionsWithTime = (
     snxAccounts(
       first: ${count}
       skip: ${skip}
-      where: { type: PERP }
+      where: { 
+      type: PERP
+      openPositionCount_gt:0
+      }
     ) {
       id
       accountId
@@ -435,7 +436,6 @@ export const fetchAllOpenPositionsWithTime = (
           feedId
         }
         positionSize
-        positionCollateral
         avgPrice
         avgPriceDec
         isLong
@@ -469,6 +469,7 @@ export const fetchAllPositionHistoryWithTime = (
       skip: ${skip}
       where: {
         type: PERP
+        totalPositionsCount_gt :0
       }
     ) {
       id
@@ -500,7 +501,6 @@ export const fetchAllPositionHistoryWithTime = (
           feedId
         }
         positionSize
-        positionCollateral
         avgPrice
         avgPriceDec
         isLong

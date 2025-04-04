@@ -42,7 +42,7 @@ export const mapResponseToSnxAccount = (response: any): SnxAccount | undefined =
       id: response?.id,
       type: response?.type,
       accountId: response?.accountId,
-      owner: response?.wallet ?? mapResponseToWallet(response?.wallet),
+      owner: response?.owner ?? mapResponseToWallet(response?.owner),
       totalOrdersCount: response?.totalOrdersCount,
       totalPositionsCount: response?.totalPositionsCount,
       openPositionCount: response?.openPositionCount,
