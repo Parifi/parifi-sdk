@@ -7,6 +7,7 @@ export const fetchProtocolTradeInfo = () => gql`
       totalVolume
       totalActivePositions
       activeUsersCount
+      orderCount
     }
   }
 `;

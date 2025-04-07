@@ -6,6 +6,7 @@ export interface ProtocolStats {
   totalVolume: string;
   totalActivePositions: string;
   activeUsersCount: string;
+  orderCount: string;
 }
 
 // Returns the protocol stats
