@@ -29,9 +29,10 @@ import {
   getPositionById,
   getUserOpenPositionsWithTime,
   getUserPositionHistoryWithTime,
-  getUserPositionsBySnxAccount,
+  getUserLiquidatedPositionsBySnxAccount,
   getUserPositionsHistory,
 } from './positions';
+import { status } from '../../test/common/constants';
 
 export * from './common';
 export * from './markets';
@@ -225,9 +226,12 @@ export class Subgraph {
   }
 
   // Get open positions by user address
-  public async getUserPositionsBySnxAccount(snxAccountId: string): Promise<SnxAccount | undefined> {
+  public async getUserLiquidatedPositionsBySnxAccount(
+    snxAccountId: string,
+    lastRefresh: number,
+  ): Promise<SnxAccount | undefined> {
     const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
-    return await getUserPositionsBySnxAccount(subgraphEndpoint, snxAccountId);
+    return await getUserLiquidatedPositionsBySnxAccount(subgraphEndpoint, snxAccountId, lastRefresh);
   }
 
   // Get all closed/liquidated positions with time filter

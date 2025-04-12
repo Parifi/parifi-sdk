@@ -2,8 +2,8 @@ import { request } from 'graphql-request';
 import {
   fetchAllOpenPositionsWithTime,
   fetchAllPositionHistoryWithTime,
+  fetchLiquidatedPositionsBySnxAccount,
   fetchPositionByIdQuery,
-  fetchPositionsBySnxAccount,
   fetchPositionsByUserQuery,
   fetchPositionsByUserQueryAndStatus,
   fetchUserOpenPositionsWithTime,
@@ -173,16 +173,20 @@ export const getUserOpenPositionsWithTime = async (
 };
 
 // Get positions by SNX Account id
-export const getUserPositionsBySnxAccount = async (
+export const getUserLiquidatedPositionsBySnxAccount = async (
   subgraphEndpoint: string,
   snxAccountId: string,
+  lastRefresh: number,
 ): Promise<SnxAccount | undefined> => {
   let formattedSnxAccountId = snxAccountId;
   try {
     if (!snxAccountId.includes('PERP')) {
       formattedSnxAccountId = 'PERP-'.concat(snxAccountId);
     }
-    const subgraphResponse: any = await request(subgraphEndpoint, fetchPositionsBySnxAccount(formattedSnxAccountId));
+    const subgraphResponse: any = await request(
+      subgraphEndpoint,
+      fetchLiquidatedPositionsBySnxAccount(formattedSnxAccountId, lastRefresh),
+    );
     const snxAccount = mapResponseToSnxAccount(subgraphResponse?.snxAccount);
     return snxAccount;
   } catch (error) {

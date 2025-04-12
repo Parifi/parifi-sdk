@@ -340,7 +340,7 @@ export const fetchUserOpenPositionsWithTime = (
     }
   }`;
 
-export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
+export const fetchLiquidatedPositionsBySnxAccount = (snxAccountId: string, lastRefresh: number) =>
   gql`
     {
     snxAccount(id: "${snxAccountId}"
@@ -361,7 +361,7 @@ export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions(where: { status: LIQUIDATED, lastRefresh_gt: ${lastRefresh} }) {
         id
         market {
           id
@@ -388,6 +388,20 @@ export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
     }
     }
   }`;
+
+export const fetchCrossMarginPositionsBySnxAccount = (snxAccountId: string, lastRefresh: number) => gql`
+  {
+    snxAccount(id: "${snxAccountId}") {
+      accountId
+      collateralDeposits {
+        totalAmountLiquidated
+      }
+      positions(where: { status: LIQUIDATED, lastRefresh_gt: ${lastRefresh} }) {
+        lastRefresh
+      }
+    }
+  }
+`;
 
 // Fetches positions for a user address by status
 export const fetchAllOpenPositionsWithTime = (
