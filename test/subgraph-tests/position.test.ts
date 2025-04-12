@@ -9,25 +9,6 @@ describe('Position fetching logic from subgraph', () => {
     expect(positionData.length).not.toBe(0);
   });
 
-  it('should return positions for a snx account id', async () => {
-    const parifiSdk = await getParifiSdkInstanceForTesting();
-
-    {
-      // It should return position data just with the snx account id
-      const snxAccountId = '10209728236255228114';
-      const positionData = await parifiSdk.subgraph.getUserPositionsBySnxAccount(snxAccountId);
-      expect(positionData?.accountId).toEqual(snxAccountId);
-    }
-
-    {
-      // It should return position data just with the formatted snx account id
-      // e.g PERP-1400686614607063115
-      const snxAccountId = 'PERP-1400686614607063115';
-      const positionData = await parifiSdk.subgraph.getUserPositionsBySnxAccount(snxAccountId);
-      expect(positionData?.id).toEqual(snxAccountId);
-    }
-  });
-
   it('should return only closed positions for a snx account id', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
     const ownerAddress = '0x93a6cf9c7f23624d67356b637eb69345006412e0';
@@ -60,7 +41,7 @@ describe('Position fetching logic from subgraph', () => {
       // It should return position data just with the snx account id
       const snxAccountId = '12868688093503149326';
       const lastRefresh = 1741189060;
-      const positionData = await parifiSdk.subgraph.getCrossMarginPositionsBySnxAccount(snxAccountId, lastRefresh);
+      const positionData = await parifiSdk.subgraph.getUserLiquidatedPositionsBySnxAccount(snxAccountId, lastRefresh);
       console.log(positionData?.collateralDeposits?.[0]?.totalAmountLiquidated);
       expect(positionData?.positions?.length).toEqual(1);
     }

@@ -340,7 +340,7 @@ export const fetchUserOpenPositionsWithTime = (
     }
   }`;
 
-export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
+export const fetchLiquidatedPositionsBySnxAccount = (snxAccountId: string, lastRefresh: number) =>
   gql`
     {
     snxAccount(id: "${snxAccountId}"
@@ -361,7 +361,7 @@ export const fetchPositionsBySnxAccount = (snxAccountId: string) =>
         totalAmountWithdrawn
         totalAmountLiquidated
       }
-      positions {
+      positions(where: { status: LIQUIDATED, lastRefresh_gt: ${lastRefresh} }) {
         id
         market {
           id

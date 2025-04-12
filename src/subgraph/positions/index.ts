@@ -2,9 +2,8 @@ import { request } from 'graphql-request';
 import {
   fetchAllOpenPositionsWithTime,
   fetchAllPositionHistoryWithTime,
-  fetchCrossMarginPositionsBySnxAccount,
+  fetchLiquidatedPositionsBySnxAccount,
   fetchPositionByIdQuery,
-  fetchPositionsBySnxAccount,
   fetchPositionsByUserQuery,
   fetchPositionsByUserQueryAndStatus,
   fetchUserOpenPositionsWithTime,
@@ -174,26 +173,7 @@ export const getUserOpenPositionsWithTime = async (
 };
 
 // Get positions by SNX Account id
-export const getUserPositionsBySnxAccount = async (
-  subgraphEndpoint: string,
-  snxAccountId: string,
-): Promise<SnxAccount | undefined> => {
-  let formattedSnxAccountId = snxAccountId;
-  try {
-    if (!snxAccountId.includes('PERP')) {
-      formattedSnxAccountId = 'PERP-'.concat(snxAccountId);
-    }
-    const subgraphResponse: any = await request(subgraphEndpoint, fetchPositionsBySnxAccount(formattedSnxAccountId));
-    const snxAccount = mapResponseToSnxAccount(subgraphResponse?.snxAccount);
-    return snxAccount;
-  } catch (error) {
-    console.error('Error fetching positions:', error);
-    return undefined;
-  }
-};
-
-// Get positions by SNX Account id
-export const getCrossMarginPositionsBySnxAccount = async (
+export const getUserLiquidatedPositionsBySnxAccount = async (
   subgraphEndpoint: string,
   snxAccountId: string,
   lastRefresh: number,
@@ -205,7 +185,7 @@ export const getCrossMarginPositionsBySnxAccount = async (
     }
     const subgraphResponse: any = await request(
       subgraphEndpoint,
-      fetchCrossMarginPositionsBySnxAccount(formattedSnxAccountId, lastRefresh),
+      fetchLiquidatedPositionsBySnxAccount(formattedSnxAccountId, lastRefresh),
     );
     const snxAccount = mapResponseToSnxAccount(subgraphResponse?.snxAccount);
     return snxAccount;
