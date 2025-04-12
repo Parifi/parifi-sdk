@@ -24,6 +24,7 @@ import {
   getAllPositionHistoryWithTime,
   getAllPositionsByUserAddress,
   getClosedPositionsByUserAddress,
+  getCrossMarginPositionsBySnxAccount,
   getLiquidatedPositionsByUserAddress,
   getOpenPositionsByUserAddress,
   getPositionById,
@@ -228,6 +229,15 @@ export class Subgraph {
   public async getUserPositionsBySnxAccount(snxAccountId: string): Promise<SnxAccount | undefined> {
     const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
     return await getUserPositionsBySnxAccount(subgraphEndpoint, snxAccountId);
+  }
+
+  // Get open positions by user address
+  public async getCrossMarginPositionsBySnxAccount(
+    snxAccountId: string,
+    lastRefresh: number,
+  ): Promise<SnxAccount | undefined> {
+    const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
+    return await getCrossMarginPositionsBySnxAccount(subgraphEndpoint, snxAccountId, lastRefresh);
   }
 
   // Get all closed/liquidated positions with time filter

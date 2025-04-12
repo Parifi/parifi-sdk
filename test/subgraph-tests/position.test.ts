@@ -44,12 +44,25 @@ describe('Position fetching logic from subgraph', () => {
     console.log('Position data:::', positionData);
     expect(positionData.length).toEqual(6);
   });
-  it.only('should return only closed positions of this timeframe', async () => {
+  it('should return only closed positions of this timeframe', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
     const startTime = 1743710952;
     const endTime = 1743763152;
     const positionData = await parifiSdk.subgraph.getAllPositionHistoryWithTime(startTime, endTime);
     console.log('Position data:::', positionData);
     expect(positionData.length).toEqual(6);
+  });
+
+  it.only('should return positions for a snx account id', async () => {
+    const parifiSdk = await getParifiSdkInstanceForTesting();
+
+    {
+      // It should return position data just with the snx account id
+      const snxAccountId = '12868688093503149326';
+      const lastRefresh = 1741189060;
+      const positionData = await parifiSdk.subgraph.getCrossMarginPositionsBySnxAccount(snxAccountId, lastRefresh);
+      console.log(positionData?.collateralDeposits?.[0]?.totalAmountLiquidated);
+      expect(positionData?.positions?.length).toEqual(1);
+    }
   });
 });
