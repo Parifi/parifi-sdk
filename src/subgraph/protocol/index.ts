@@ -2,11 +2,15 @@ import request from 'graphql-request';
 import { fetchProtocolTradeInfo } from './subgraphQueries';
 
 export interface ProtocolStats {
-  orderTotalFees: string;
-  totalVolume: string;
-  totalActivePositions: string;
+  userCount: string;
   activeUsersCount: string;
   orderCount: string;
+  settledCount: string;
+  positionCount: string;
+  totalActivePositions: string;
+  referralFeesReceived: string;
+  totalVolume: string;
+  orderTotalFees: string;
 }
 
 // Returns the protocol stats
