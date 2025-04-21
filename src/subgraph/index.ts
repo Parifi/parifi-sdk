@@ -18,7 +18,7 @@ import {
 import { LeaderboardUserData, Market, Order, Position } from '../interfaces/sdkTypes';
 import { PriceObject, SnxAccount } from '../interfaces';
 import { getProtocolStats } from './protocol';
-import { getAllOrdersByUserAddress, getOrderById } from './orders';
+import { getAllOrdersByUserAddress, getOrderById, getSettledOrdersCountBasedOnTimeStampByUserAddress } from './orders';
 import {
   getAllOpenPositionsWithTime,
   getAllPositionHistoryWithTime,
@@ -146,6 +146,24 @@ export class Subgraph {
   public async getUserByAddress(userAddress: string): Promise<any> {
     const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
     return await getAccountByAddress(subgraphEndpoint, userAddress);
+  }
+
+  public async getSettledOrdersCountBasedOnTimeStampByUserAddress(
+    userAddress: string,
+    count: number,
+    skip: number,
+    startTime: number,
+    endTime: number,
+  ): Promise<number> {
+    const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
+    return await getSettledOrdersCountBasedOnTimeStampByUserAddress(
+      subgraphEndpoint,
+      userAddress,
+      count,
+      skip,
+      startTime,
+      endTime,
+    );
   }
 
   ////////////////////////////////////////////////////////////////
