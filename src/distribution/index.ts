@@ -1,5 +1,5 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { encodeFunctionData, getContract } from 'viem';
+import { encodeFunctionData } from 'viem';
 import {
   REWARD_DISTRIBUTOR_ABI,
   REWARD_DISTRIBUTOR_ADDRESSES,
