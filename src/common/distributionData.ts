@@ -6,338 +6,213 @@ export enum SUPPORTED_CHAINS {
   BASE = 8453,
 }
 
+// NOTE: this data could be fetched from backend to avoid publish a new version with each update
+// this list coulkd change a lot so could be easiest in that way
 export const USERS_REWARDS: Record<string, Record<number, { address: string; amount: string }[]>> = {
   prf: { 1: [] },
+  rt: {
+    1: [
+      {
+        address: '0x2265E0B8cF9DF4c4D9770B6c45E270eE0663C52F',
+        // 1RT
+        amount: '1000000000000000000',
+      },
+    ],
+  },
 };
 
+// NOTE: not 100% neccesary
+// NOTE: this one also could be fetched from backend to avoid publish a new version with each update
 export const REWARD_DISTRIBUTOR_ADDRESSES: Record<number, Record<string, Address>> = {
-  [SUPPORTED_CHAINS.BASE]: { prf: '0x0000000000000000000000000000000000000000' },
+  [SUPPORTED_CHAINS.BASE]: {
+    prf: '0x0000000000000000000000000000000000000000',
+    rt: '0x648d6D711860699A11aBa192E9daBAfb6408af18',
+  },
 };
 
 export const REWARD_DISTRIBUTOR_ABI = [
   {
-    type: 'function',
-    name: 'IS_TEST',
-    inputs: [],
-    outputs: [{ name: '', type: 'bool', internalType: 'bool' }],
-    stateMutability: 'view',
+    inputs: [{ internalType: 'contract IERC20', name: '_rewardToken', type: 'address' }],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
   },
+  { inputs: [], name: 'AccessControlBadConfirmation', type: 'error' },
   {
-    type: 'function',
-    name: 'excludeArtifacts',
-    inputs: [],
-    outputs: [{ name: 'excludedArtifacts_', type: 'string[]', internalType: 'string[]' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'excludeContracts',
-    inputs: [],
-    outputs: [{ name: 'excludedContracts_', type: 'address[]', internalType: 'address[]' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'excludeSelectors',
-    inputs: [],
-    outputs: [
-      {
-        name: 'excludedSelectors_',
-        type: 'tuple[]',
-        internalType: 'struct StdInvariant.FuzzSelector[]',
-        components: [
-          { name: 'addr', type: 'address', internalType: 'address' },
-          { name: 'selectors', type: 'bytes4[]', internalType: 'bytes4[]' },
-        ],
-      },
+    inputs: [
+      { internalType: 'address', name: 'account', type: 'address' },
+      { internalType: 'bytes32', name: 'neededRole', type: 'bytes32' },
     ],
-    stateMutability: 'view',
+    name: 'AccessControlUnauthorizedAccount',
+    type: 'error',
   },
   {
-    type: 'function',
-    name: 'excludeSenders',
-    inputs: [],
-    outputs: [{ name: 'excludedSenders_', type: 'address[]', internalType: 'address[]' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'failed',
-    inputs: [],
-    outputs: [{ name: '', type: 'bool', internalType: 'bool' }],
-    stateMutability: 'view',
-  },
-  { type: 'function', name: 'setUp', inputs: [], outputs: [], stateMutability: 'nonpayable' },
-  {
-    type: 'function',
-    name: 'targetArtifactSelectors',
-    inputs: [],
-    outputs: [
-      {
-        name: 'targetedArtifactSelectors_',
-        type: 'tuple[]',
-        internalType: 'struct StdInvariant.FuzzArtifactSelector[]',
-        components: [
-          { name: 'artifact', type: 'string', internalType: 'string' },
-          { name: 'selectors', type: 'bytes4[]', internalType: 'bytes4[]' },
-        ],
-      },
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'user', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
-    stateMutability: 'view',
+    name: 'RewardClaimed',
+    type: 'event',
   },
   {
-    type: 'function',
-    name: 'targetArtifacts',
-    inputs: [],
-    outputs: [{ name: 'targetedArtifacts_', type: 'string[]', internalType: 'string[]' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'targetContracts',
-    inputs: [],
-    outputs: [{ name: 'targetedContracts_', type: 'address[]', internalType: 'address[]' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'targetInterfaces',
-    inputs: [],
-    outputs: [
-      {
-        name: 'targetedInterfaces_',
-        type: 'tuple[]',
-        internalType: 'struct StdInvariant.FuzzInterface[]',
-        components: [
-          { name: 'addr', type: 'address', internalType: 'address' },
-          { name: 'artifacts', type: 'string[]', internalType: 'string[]' },
-        ],
-      },
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { indexed: true, internalType: 'bytes32', name: 'previousAdminRole', type: 'bytes32' },
+      { indexed: true, internalType: 'bytes32', name: 'newAdminRole', type: 'bytes32' },
     ],
-    stateMutability: 'view',
+    name: 'RoleAdminChanged',
+    type: 'event',
   },
   {
-    type: 'function',
-    name: 'targetSelectors',
-    inputs: [],
-    outputs: [
-      {
-        name: 'targetedSelectors_',
-        type: 'tuple[]',
-        internalType: 'struct StdInvariant.FuzzSelector[]',
-        components: [
-          { name: 'addr', type: 'address', internalType: 'address' },
-          { name: 'selectors', type: 'bytes4[]', internalType: 'bytes4[]' },
-        ],
-      },
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { indexed: true, internalType: 'address', name: 'account', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
     ],
-    stateMutability: 'view',
+    name: 'RoleGranted',
+    type: 'event',
   },
   {
-    type: 'function',
-    name: 'targetSenders',
-    inputs: [],
-    outputs: [{ name: 'targetedSenders_', type: 'address[]', internalType: 'address[]' }],
-    stateMutability: 'view',
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { indexed: true, internalType: 'address', name: 'account', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
+    ],
+    name: 'RoleRevoked',
+    type: 'event',
   },
-  { type: 'function', name: 'test_distribute', inputs: [], outputs: [], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'test_distribute_multiple', inputs: [], outputs: [], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'test_fail_already_distributed', inputs: [], outputs: [], stateMutability: 'nonpayable' },
-  { type: 'function', name: 'test_fail_distribute', inputs: [], outputs: [], stateMutability: 'nonpayable' },
   {
-    type: 'function',
-    name: 'test_fail_distribute_only_started',
     inputs: [],
+    name: 'DEFAULT_ADMIN_ROLE',
+    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'actualRound',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: '_round', type: 'uint256' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { internalType: 'bytes32[]', name: 'proof', type: 'bytes32[]' },
+    ],
+    name: 'claimReward',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    type: 'function',
-    name: 'test_fail_setRound_only_admin',
-    inputs: [{ name: 'round', type: 'uint256', internalType: 'uint256' }],
+    inputs: [
+      { internalType: 'uint256[]', name: '_rounds', type: 'uint256[]' },
+      { internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' },
+      { internalType: 'bytes32[][]', name: 'proofs', type: 'bytes32[][]' },
+    ],
+    name: 'claimRewards',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'uint256', name: '', type: 'uint256' },
+      { internalType: 'address', name: '', type: 'address' },
+    ],
+    name: 'claimed',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
     type: 'function',
-    name: 'test_fail_setRound_only_set_future_rounds',
+  },
+  {
+    inputs: [{ internalType: 'bytes32', name: 'role', type: 'bytes32' }],
+    name: 'getRoleAdmin',
+    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'account', type: 'address' },
+    ],
+    name: 'grantRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'account', type: 'address' },
+    ],
+    name: 'hasRole',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'callerConfirmation', type: 'address' },
+    ],
+    name: 'renounceRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'account', type: 'address' },
+    ],
+    name: 'revokeRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
+    name: 'rewardToken',
+    outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
+    stateMutability: 'view',
     type: 'function',
-    name: 'test_fail_setRound_root_should_be_setted',
-    inputs: [],
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_round', type: 'uint256' }],
+    name: 'setActualRound',
     outputs: [],
     stateMutability: 'nonpayable',
-  },
-  { type: 'function', name: 'test_setRound', inputs: [], outputs: [], stateMutability: 'nonpayable' },
-  {
-    type: 'event',
-    name: 'log',
-    inputs: [{ name: '', type: 'string', indexed: false, internalType: 'string' }],
-    anonymous: false,
+    type: 'function',
   },
   {
-    type: 'event',
-    name: 'log_address',
-    inputs: [{ name: '', type: 'address', indexed: false, internalType: 'address' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_array',
-    inputs: [{ name: 'val', type: 'uint256[]', indexed: false, internalType: 'uint256[]' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_array',
-    inputs: [{ name: 'val', type: 'int256[]', indexed: false, internalType: 'int256[]' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_array',
-    inputs: [{ name: 'val', type: 'address[]', indexed: false, internalType: 'address[]' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_bytes',
-    inputs: [{ name: '', type: 'bytes', indexed: false, internalType: 'bytes' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_bytes32',
-    inputs: [{ name: '', type: 'bytes32', indexed: false, internalType: 'bytes32' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_int',
-    inputs: [{ name: '', type: 'int256', indexed: false, internalType: 'int256' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_address',
     inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'address', indexed: false, internalType: 'address' },
+      { internalType: 'uint256', name: '_round', type: 'uint256' },
+      { internalType: 'bytes32', name: '_root', type: 'bytes32' },
     ],
-    anonymous: false,
+    name: 'setRootPerRound',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    type: 'event',
-    name: 'log_named_array',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'uint256[]', indexed: false, internalType: 'uint256[]' },
-    ],
-    anonymous: false,
+    inputs: [{ internalType: 'bytes4', name: 'interfaceId', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    type: 'event',
-    name: 'log_named_array',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'int256[]', indexed: false, internalType: 'int256[]' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_array',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'address[]', indexed: false, internalType: 'address[]' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_bytes',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'bytes', indexed: false, internalType: 'bytes' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_bytes32',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'bytes32', indexed: false, internalType: 'bytes32' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_decimal_int',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'int256', indexed: false, internalType: 'int256' },
-      { name: 'decimals', type: 'uint256', indexed: false, internalType: 'uint256' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_decimal_uint',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'uint256', indexed: false, internalType: 'uint256' },
-      { name: 'decimals', type: 'uint256', indexed: false, internalType: 'uint256' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_int',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'int256', indexed: false, internalType: 'int256' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_string',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'string', indexed: false, internalType: 'string' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_named_uint',
-    inputs: [
-      { name: 'key', type: 'string', indexed: false, internalType: 'string' },
-      { name: 'val', type: 'uint256', indexed: false, internalType: 'uint256' },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_string',
-    inputs: [{ name: '', type: 'string', indexed: false, internalType: 'string' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'log_uint',
-    inputs: [{ name: '', type: 'uint256', indexed: false, internalType: 'uint256' }],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'logs',
-    inputs: [{ name: '', type: 'bytes', indexed: false, internalType: 'bytes' }],
-    anonymous: false,
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    name: 'verifiersPerRound',
+    outputs: [{ internalType: 'contract Verifier', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
   },
 ];
