@@ -25,12 +25,13 @@ export type SnxAccount = {
   countProfitablePositions?: string;
   countLossPositions?: string;
   countLiquidatedPositions?: string;
-  totalRealizedPnlPositions?: string;
+  realizedPnlFromPositions?: string;
+  totalFeesPaid?: string;
+  finalPnlAfterFees?: string;
   totalVolumeInUsd?: string;
-  totalVolumeInUsdLongs?: string;
-  totalVolumeInUsdShorts?: string;
   totalAccruedBorrowingFeesInUsd?: string;
   integratorFeesGenerated?: string;
+  lastLiquidationValue?: string;
   orders?: Order[];
   positions?: Position[];
   collateralDeposits?: CollateralDeposit[];
@@ -77,12 +78,14 @@ export type Market = {
   makerFee?: string;
   takerFee?: string;
   maxMarketValue?: string;
+  maxMarketSize?: string;
   marketPrice?: string;
   initialMarginRatioD18?: string;
   maintenanceMarginRatioD18?: string;
   minimumInitialMarginRatioD18?: string;
   flagRewardRatioD18?: string;
   minimumPositionMargin?: string;
+  openInterestUsd?: string;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -111,9 +114,11 @@ export type Order = {
   createdTimestamp?: string;
   status?: OrderStatus;
   settledTxHash?: string;
+  cancellationTxHash?: string;
   settledTimestamp?: string;
   settledTimestampISO: string;
   settledBy?: Wallet;
+  snapshotCollateralValueUsd?: string;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -132,35 +137,37 @@ export type Position = {
   txHash?: string;
   liquidationTxHash?: string;
   closingPrice?: string;
-  realizedPnl?: string;
-  realizedFee?: string;
-  netRealizedPnl?: string;
+  realizedPositionPnl?: string;
+  totalFeesPaid?: string;
+  realizedPnlAfterFees?: string;
   createdTimestamp?: string;
   lastRefresh?: string;
   lastRefreshISO?: string;
   accruedBorrowingFees?: string;
   canBeLiquidated?: boolean;
+  snapshotCollateralValueUsd?: string;
 };
+
+////////////////////////////////////////////////////////////////
+//////////////////////    Protocol Stats   /////////////////////
+////////////////////////////////////////////////////////////////
+
+export interface ProtocolStats {
+  id?: string;
+  userCount?: string;
+  activeUsersCount?: string;
+  orderCount?: string;
+  settledCount?: string;
+  positionCount?: string;
+  totalActivePositions?: string;
+  referralFeesReceived?: string;
+  totalVolume?: string;
+  orderTotalFees?: string;
+}
 
 ////////////////////////////////////////////////////////////////
 ///////////////////////    Portfolio   /////////////////////////
 ////////////////////////////////////////////////////////////////
-
-/// Interface to return portfolio total from the sdk
-export type UserPortfolioData = {
-  userAddress?: string;
-  realizedPnl?: Decimal;
-  unrealizedPnl?: Decimal;
-  depositedLiquidity?: Decimal;
-  depositedCollateral?: Decimal;
-};
-
-export interface ReferralRewardsInUsd {
-  userAddress?: string;
-  totalReferralRewardsInUsd?: Decimal;
-  unclaimedReferralRewardsUsdc?: BigInt;
-  unclaimedReferralRewardsWeth?: BigInt;
-}
 
 // Interface to return account specific data for Leaderboard stats
 export interface LeaderboardUserData {
@@ -178,18 +185,30 @@ export interface LeaderboardUserData {
 }
 
 export type Token = {
-  id: string;
+  id?: string;
   name?: string;
   symbol?: string;
   decimals?: string;
-  pyth?: PythData;
   lastPriceUSD?: string;
   lastPriceTimestamp?: string;
 };
 
 ////////////////////////////////////////////////////////////////
-///////////////////////    Pyth    /////////////////////////////
+///////////////////////    Others    ///////////////////////////
 ////////////////////////////////////////////////////////////////
+
+export type SettlementStrategy = {
+  id?: string;
+  strategyId?: string;
+  strategyType?: string;
+  settlementDelay?: string;
+  settlementWindowDuration?: string;
+  priceVerificationContract?: string;
+  feedId?: string;
+  settlementReward?: string;
+  disabled?: string;
+  commitmentPriceDelay?: string;
+};
 
 export type FormattedPythPrice = {
   priceId: string;

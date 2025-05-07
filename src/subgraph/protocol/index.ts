@@ -1,17 +1,6 @@
 import request from 'graphql-request';
 import { fetchProtocolTradeInfo } from './subgraphQueries';
-
-export interface ProtocolStats {
-  userCount: string;
-  activeUsersCount: string;
-  orderCount: string;
-  settledCount: string;
-  positionCount: string;
-  totalActivePositions: string;
-  referralFeesReceived: string;
-  totalVolume: string;
-  orderTotalFees: string;
-}
+import { ProtocolStats } from '../../interfaces';
 
 // Returns the protocol stats
 export const getProtocolStats = async (subgraphEndpoint: string): Promise<ProtocolStats> => {

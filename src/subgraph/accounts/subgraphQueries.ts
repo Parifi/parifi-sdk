@@ -76,35 +76,6 @@ export const fetchPortfolioData = (userAddresses: string[]) => gql`
 }
 `;
 
-export const fetchReferralRewardsInUsd = (userAddresses: string[]) => gql`
-{
-  accounts(
-    orderBy: totalReferralRewardsInUsd
-    orderDirection: desc
-    where: {id_in: [${userAddresses.map((id) => `"${id}"`).join(', ')}]}
-  ) {
-    id
-    totalReferralRewardsInUsd
-    unclaimedReferralRewardsUsdc
-    unclaimedReferralRewardsWeth
-  }
-}`;
-
-export const fetchTopAccountsByReferralFees = (count: number = 20, skip: number = 0) => gql`
-{
-  accounts(
-    first: ${count}
-    skip: ${skip}
-    orderBy: totalReferralRewardsInUsd
-    orderDirection: desc
-  ) {
-    id
-    totalReferralRewardsInUsd
-    unclaimedReferralRewardsUsdc
-    unclaimedReferralRewardsWeth
-  }
-}`;
-
 export const fetchAccountByWalletAddress = (walletAddress: string) =>
   gql`
   {
