@@ -54,7 +54,8 @@ export class RewardDistribution {
 
   async getUserData(user: string, tokenSymbol: string, round: number) {
     const tree = await this.getTree(tokenSymbol, round);
-    const indexOf = tree.dump().values.findIndex((data) => data.value.at(0) === user);
+
+    const indexOf = tree.dump().values.findIndex((data) => data.value.at(0)?.toLowerCase() === user.toLowerCase());
     const userData = tree
       .dump()
       .values.find((data) => data.value.at(0)?.toLowerCase() === user.toLowerCase())
