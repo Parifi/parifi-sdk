@@ -1,13 +1,15 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { encodeFunctionData } from 'viem';
-import {
-  REWARD_DISTRIBUTOR_ABI,
-  REWARD_DISTRIBUTOR_ADDRESSES,
-  SUPPORTED_CHAINS,
-  USERS_REWARDS,
-} from '../common/distributionData';
+import { REWARD_DISTRIBUTOR_ABI, REWARD_DISTRIBUTOR_ADDRESSES, SUPPORTED_CHAINS } from '../common/constants';
+
+export type RewardList = Record<string, Record<number, { address: string; amount: string }[]>>;
 
 export class RewardDistribution {
+  rewards: RewardList;
+
+  constructor(_rewards: RewardList) {
+    this.rewards = _rewards;
+  }
   /**
    * Gets the reward contract address and ABI for a specific token.
    * @param tokenSymbol The symbol of the token.
@@ -36,7 +38,7 @@ export class RewardDistribution {
    */
   async getTree(tokenSymbol: string, round: number) {
     tokenSymbol = tokenSymbol.toLowerCase();
-    const treeData = USERS_REWARDS?.[tokenSymbol]?.[round];
+    const treeData = this.rewards?.[tokenSymbol]?.[round];
 
     if (!treeData) {
       throw new Error(`No rewards found for token ${tokenSymbol}`);
