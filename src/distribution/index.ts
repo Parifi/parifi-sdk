@@ -61,7 +61,6 @@ export class RewardDistribution {
       .values.find((data) => data.value.at(0)?.toLowerCase() === user.toLowerCase())
       ?.value?.reduce(
         (acc, curr, index) => {
-          console.log('=== acc, curr', acc, curr);
           const keys: ['address', 'amount'] = ['address', 'amount'];
           const key: 'address' | 'amount' = keys[index];
 
