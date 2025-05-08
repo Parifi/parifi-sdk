@@ -49,10 +49,10 @@ export const mapResponseToSnxAccount = (response: any): SnxAccount | undefined =
       countProfitablePositions: response?.countProfitablePositions,
       countLossPositions: response?.countLossPositions,
       countLiquidatedPositions: response?.countLiquidatedPositions,
-      totalRealizedPnlPositions: response?.totalRealizedPnlPositions,
+      realizedPnlFromPositions: response?.realizedPnlFromPositions,
+      totalFeesPaid: response?.totalFeesPaid,
+      finalPnlAfterFees: response?.finalPnlAfterFees,
       totalVolumeInUsd: response?.totalVolumeInUsd,
-      totalVolumeInUsdLongs: response?.totalVolumeInUsdLongs,
-      totalVolumeInUsdShorts: response?.totalVolumeInUsdShorts,
       totalAccruedBorrowingFeesInUsd: response?.totalAccruedBorrowingFeesInUsd,
       integratorFeesGenerated: response?.integratorFeesGenerated,
       orders: response?.orders ? mapResponseToOrderArray(response?.orders) : [],
@@ -92,11 +92,9 @@ export const mapResponseToMarket = (response: any): Market | undefined => {
       marketName: response?.marketName ?? '',
       marketSymbol: response?.marketSymbol ?? '',
       feedId: response?.feedId ?? '',
-      marketPrice: response?.marketPrice ?? '0',
-      size: response?.size ?? '0',
       skew: response?.skew ?? '0',
+      size: response?.size ?? '0',
       maxOpenInterest: response?.maxOpenInterest ?? '0',
-      maxMarketValue: response?.maxMarketValue ?? '0',
       interestRate: response?.interestRate ?? '0',
       currentFundingRate: response?.currentFundingRate ?? '0',
       currentFundingVelocity: response?.currentFundingVelocity ?? '0',
@@ -105,10 +103,15 @@ export const mapResponseToMarket = (response: any): Market | undefined => {
       maxFundingVelocity: response?.maxFundingVelocity ?? '0',
       makerFee: response?.makerFee ?? '0',
       takerFee: response?.takerFee ?? '0',
+      maxMarketValue: response?.maxMarketValue ?? '0',
+      maxMarketSize: response?.maxMarketSize ?? '0',
+      marketPrice: response?.marketPrice ?? '0',
       initialMarginRatioD18: response?.initialMarginRatioD18 ?? '0',
-      minimumPositionMargin: response?.minimumPositionMargin ?? '0',
       maintenanceMarginRatioD18: response?.maintenanceMarginRatioD18 ?? '0',
       minimumInitialMarginRatioD18: response?.minimumInitialMarginRatioD18 ?? '0',
+      flagRewardRatioD18: response?.flagRewardRatioD18 ?? '0',
+      minimumPositionMargin: response?.minimumPositionMargin ?? '0',
+      openInterestUsd: response?.openInterestUsd ?? '0',
     };
   } catch (error) {
     console.log('Error while mapping data', error);
@@ -157,9 +160,11 @@ export const mapResponseToOrder = (response: any): Order | undefined => {
       createdTimestamp: response?.createdTimestamp,
       status: response?.status,
       settledTxHash: response?.settledTxHash,
+      cancellationTxHash: response?.cancellationTxHash,
       settledTimestamp: response?.settledTimestamp,
       settledTimestampISO: response?.settledTimestampISO,
       settledBy: response?.settledBy ?? mapResponseToWallet(response?.settledBy),
+      snapshotCollateralValueUsd: response?.snapshotCollateralValueUsd,
     };
   } catch (error) {
     console.log('Error while mapping data', error);
@@ -236,14 +241,15 @@ export const mapResponseToPosition = (response: any): Position | undefined => {
       txHash: response?.txHash,
       liquidationTxHash: response?.liquidationTxHash,
       closingPrice: response?.closingPrice,
-      realizedPnl: response?.realizedPositionPnl,
-      realizedFee: response?.realizedFee,
-      netRealizedPnl: response?.realizedPnlAfterFees,
+      realizedPositionPnl: response?.realizedPositionPnl,
+      totalFeesPaid: response?.totalFeesPaid,
+      realizedPnlAfterFees: response?.realizedPnlAfterFees,
       createdTimestamp: response?.createdTimestamp,
       lastRefresh: response?.lastRefresh,
       lastRefreshISO: response?.lastRefreshISO,
       accruedBorrowingFees: response?.accruedBorrowingFees,
       canBeLiquidated: response?.canBeLiquidated,
+      snapshotCollateralValueUsd: response?.snapshotCollateralValueUsd,
     };
   } catch (error) {
     console.log('Error while mapping data', error);
@@ -277,7 +283,6 @@ export const mapResponseToToken = (response: any): Token | undefined => {
       name: response?.name,
       symbol: response?.symbol,
       decimals: response?.decimals,
-      pyth: response?.pyth ? mapResponseToPythData(response?.pyth) : undefined,
       lastPriceUSD: response?.lastPriceUSD,
       lastPriceTimestamp: response?.lastPriceTimestamp,
     };

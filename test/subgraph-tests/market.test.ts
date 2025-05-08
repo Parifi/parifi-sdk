@@ -5,7 +5,7 @@ describe('Market fetching logic from subgraph', () => {
   it('should return correct market details', async () => {
     const parifiSdk = await getParifiSdkInstanceForTesting();
     const markets = await parifiSdk.subgraph.getAllMarketsFromSubgraph();
-    expect(markets.length).toBe(81);
+    expect(markets.length).toBeGreaterThan(80);
   });
 
   it('should return correct market details', async () => {

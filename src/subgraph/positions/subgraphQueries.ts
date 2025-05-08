@@ -110,6 +110,63 @@ export const fetchPositionsByUserQueryAndStatus = (
     }
   }`;
 
+// Fetches open positions for a user address
+export const fetchOpenPositionsByUser = (userAddress: string, count: number = 20, skip: number = 0) =>
+  gql`
+    {
+    snxAccounts(
+      first: ${count}
+      skip: ${skip}
+      where: {
+        owner: "${userAddress}",
+        type: PERP,
+        openPositionCount_gt: 0
+      }
+    ) {
+      id
+      accountId
+      owner {
+        id
+      }
+      collateralDeposits {
+        id
+        collateralName
+        collateralSymbol
+        collateralDecimals
+        collateralAddress
+        currentDepositedAmount
+        totalAmountDeposited
+        totalAmountWithdrawn
+        totalAmountLiquidated
+      }
+      positions(where: {status: OPEN }) {
+        id
+        market {
+          id
+          marketName
+          marketSymbol
+          feedId
+        }
+        positionSize
+        avgPrice
+        avgPriceDec
+        isLong
+        createdTimestamp
+        status
+        txHash
+        liquidationTxHash
+        closingPrice
+        realizedPositionPnl
+        realizedPnlAfterFees
+        totalFeesPaid
+        createdTimestamp
+        lastRefresh
+        lastRefreshISO
+        canBeLiquidated
+      }
+    }
+  }`;
+
 // Fetches positions for a user address by status
 export const fetchUserPositionHistory = (userAddress: string, count: number = 20, skip: number = 0) =>
   gql`
