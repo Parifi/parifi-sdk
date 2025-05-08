@@ -94,23 +94,6 @@ export enum SUPPORTED_CHAINS {
   BASE = 8453,
 }
 
-// // NOTE: this data could be fetched from backend to avoid publish a new version with each update
-// // this list coulkd change a lot so could be easiest in that way
-// export const USERS_REWARDS: Record<string, Record<number, { address: string; amount: string }[]>> = {
-//   prf: { 1: [] },
-//   rt: {
-//     1: [
-//       {
-//         address: '0x2265E0B8cF9DF4c4D9770B6c45E270eE0663C52F',
-//         // 1RT
-//         amount: '1000000000000000000',
-//       },
-//     ],
-//   },
-// };
-
-// NOTE: not 100% neccesary
-// NOTE: this one also could be fetched from backend to avoid publish a new version with each update
 export const REWARD_DISTRIBUTOR_ADDRESSES: Record<number, Record<string, Address>> = {
   [SUPPORTED_CHAINS.BASE]: {
     prf: '0x0000000000000000000000000000000000000000',
