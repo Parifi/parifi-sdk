@@ -113,13 +113,14 @@ export class RewardDistribution {
     if (!userData || !userData?.address) throw new Error(`User ${user} not found in the tree`);
 
     const proof = tree.getProof(indexOf);
+    const distributor = await this.getRewardContract(tokenSymbol);
 
     return [
       {
         tx: {
-          to: REWARD_DISTRIBUTOR_ADDRESSES[SUPPORTED_CHAINS.BASE][tokenSymbol],
+          to: distributor.address,
           data: encodeFunctionData({
-            abi: REWARD_DISTRIBUTOR_ABI,
+            abi: distributor.abi,
             functionName: 'claimReward',
             args: [round, userData.amount, proof],
           }),
