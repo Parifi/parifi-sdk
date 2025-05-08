@@ -52,6 +52,33 @@ export const fetchOrdersByUserQuery = (userAddress: string, count: number = 50, 
   }
 `;
 
+// Fetch all orders by `userAddress`
+export const fetchSettledOrdersCountBasedOnTimeStampByUserQuery = (
+  userAddress: string,
+  count: number = 50,
+  skip: number = 0,
+  startTimeStamp: number, // unix timestamp
+  endTimeStamp: number, //unix timestamp
+) =>
+  gql`{
+    snxAccounts(
+      first: ${count}
+      skip: ${skip}
+      where: { owner: "${userAddress}", type: PERP }) {
+      id
+      accountId
+      owner {
+        id
+      }
+       orders(
+      where: {status: SETTLED, createdTimestamp_gt: ${startTimeStamp}, createdTimestamp_lt: ${endTimeStamp}}
+    ) {
+        id
+      }
+    }
+  }
+`;
+
 export const fetchOrdersByIdQuery = (orderId: string) =>
   gql`
   {
