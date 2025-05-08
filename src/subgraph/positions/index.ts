@@ -3,6 +3,7 @@ import {
   fetchAllOpenPositionsWithTime,
   fetchAllPositionHistoryWithTime,
   fetchLiquidatedPositionsBySnxAccount,
+  fetchOpenPositionsByUser,
   fetchPositionByIdQuery,
   fetchPositionsByUserQuery,
   fetchPositionsByUserQueryAndStatus,
@@ -44,10 +45,7 @@ export const getOpenPositionsByUserAddress = async (
   skip: number = 0,
 ): Promise<SnxAccount[]> => {
   try {
-    const subgraphResponse: any = await request(
-      subgraphEndpoint,
-      fetchPositionsByUserQueryAndStatus(userAddress, 'OPEN', count, skip),
-    );
+    const subgraphResponse: any = await request(subgraphEndpoint, fetchOpenPositionsByUser(userAddress, count, skip));
     const snxAccounts = mapResponseToSnxAccountArray(subgraphResponse?.snxAccounts);
     return snxAccounts ?? [];
   } catch (error) {
