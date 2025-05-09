@@ -64,7 +64,9 @@ export class RewardDistribution {
   async getUserData(user: string, tokenSymbol: string, round: number) {
     const tree = await this.getTree(tokenSymbol, round);
 
+    // serach the index of the user in the tree
     const indexOf = tree.dump().values.findIndex((data) => data.value.at(0)?.toLowerCase() === user.toLowerCase());
+    // it return an [address, number] array so we parse to {address, amount}
     const userData = tree
       .dump()
       .values.find((data) => data.value.at(0)?.toLowerCase() === user.toLowerCase())
