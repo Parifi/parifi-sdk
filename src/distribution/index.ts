@@ -7,9 +7,18 @@ export type RewardList = Record<string, Record<number, { address: string; amount
 export class RewardDistribution {
   rewards: RewardList;
 
-  constructor(_rewards: RewardList) {
-    this.rewards = _rewards;
+  constructor(_rewards?: RewardList) {
+    this.rewards = _rewards || {};
   }
+
+  /**
+   * Sets the reward list.
+   * @param rewards The reward list to set.
+   */
+  setRewardList(rewards: RewardList) {
+    this.rewards = rewards;
+  }
+
   /**
    * Gets the reward contract address and ABI for a specific token.
    * @param tokenSymbol The symbol of the token.
