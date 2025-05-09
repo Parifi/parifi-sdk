@@ -28,7 +28,7 @@ export class ParifiSdk {
     subgraphConfig: SubgraphConfig,
     relayerConfig: RelayerConfig,
     pythConfig: PythConfig,
-    rewardList: RewardList,
+    rewardList?: RewardList,
   ) {
     this.subgraph = new Subgraph(rpcConfig, subgraphConfig, pythConfig);
     this.pyth = new Pyth(pythConfig);
