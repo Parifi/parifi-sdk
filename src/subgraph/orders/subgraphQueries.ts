@@ -44,6 +44,7 @@ export const fetchOrdersByUserQuery = (userAddress: string, count: number = 50, 
         settledTimestamp
         deltaSizeUsd
         acceptablePrice
+        snapshotCollateralValueUsd
         settledBy {
           id
         }
@@ -103,6 +104,7 @@ export const fetchOrdersByIdQuery = (orderId: string) =>
     settledTimestamp
     deltaSizeUsd
     acceptablePrice
+    snapshotCollateralValueUsd
     settledBy {
       id
     }
