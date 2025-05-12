@@ -48,6 +48,7 @@ export const fetchPositionsByUserQuery = (userAddress: string, count: number = 2
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
@@ -106,6 +107,7 @@ export const fetchPositionsByUserQueryAndStatus = (
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
@@ -163,6 +165,7 @@ export const fetchOpenPositionsByUser = (userAddress: string, count: number = 20
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
       }
     }
   }`;
@@ -216,6 +219,7 @@ export const fetchUserPositionHistory = (userAddress: string, count: number = 20
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
@@ -252,6 +256,7 @@ export const fetchPositionByIdQuery = (positionId: string) =>
             lastRefresh
             lastRefreshISO
             canBeLiquidated
+            snapshotCollateralValueUsd
         }
     }`;
 
@@ -326,6 +331,7 @@ export const fetchUserPositionHistoryWithTime = (
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
@@ -393,6 +399,7 @@ export const fetchUserOpenPositionsWithTime = (
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
@@ -442,6 +449,7 @@ export const fetchLiquidatedPositionsBySnxAccount = (snxAccountId: string, lastR
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
@@ -522,6 +530,7 @@ export const fetchAllOpenPositionsWithTime = (
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
@@ -587,6 +596,7 @@ export const fetchAllPositionHistoryWithTime = (
         lastRefresh
         lastRefreshISO
         canBeLiquidated
+        snapshotCollateralValueUsd
     }
     }
   }`;
