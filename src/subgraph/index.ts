@@ -33,6 +33,7 @@ import {
   getUserPositionsHistory,
 } from './positions';
 import { status } from '../../test/common/constants';
+import { getEstimatedRewardsForUser } from './scripts';
 
 export * from './common';
 export * from './markets';
@@ -295,5 +296,35 @@ export class Subgraph {
   public getProtocolStats() {
     const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
     return getProtocolStats(subgraphEndpoint);
+  }
+
+  ////////////////////////////////////////////////////////////////
+  ///////////////////////    MISC    /////////////////////////////
+  ////////////////////////////////////////////////////////////////
+
+  /**
+   * Estimates the rewards a user would receive based on their share of integrator fees
+   * generated during a specified time period.
+   *
+   * @param userAddress - The address of the user to calculate rewards for
+   * @param totalRewardsForPeriod - The total rewards to be distributed for the period
+   * @param startTimestamp - The starting Unix timestamp of the period
+   * @param endTimestamp - The ending Unix timestamp of the period
+   * @returns A Promise resolving to the estimated reward amount for the user
+   */
+  public async getEstimatedRewardsForUser(
+    userAddress: string,
+    totalRewardsForPeriod: number,
+    startTimestamp: number,
+    endTimestamp: number,
+  ): Promise<number> {
+    const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
+    return getEstimatedRewardsForUser(
+      subgraphEndpoint,
+      userAddress,
+      totalRewardsForPeriod,
+      startTimestamp,
+      endTimestamp,
+    );
   }
 }
