@@ -302,6 +302,16 @@ export class Subgraph {
   ///////////////////////    MISC    /////////////////////////////
   ////////////////////////////////////////////////////////////////
 
+  /**
+   * Estimates the rewards a user would receive based on their share of integrator fees
+   * generated during a specified time period.
+   *
+   * @param userAddress - The address of the user to calculate rewards for
+   * @param totalRewardsForPeriod - The total rewards to be distributed for the period
+   * @param startTimestamp - The starting Unix timestamp of the period
+   * @param endTimestamp - The ending Unix timestamp of the period
+   * @returns A Promise resolving to the estimated reward amount for the user
+   */
   public async getEstimatedRewardsForUser(
     userAddress: string,
     totalRewardsForPeriod: number,
