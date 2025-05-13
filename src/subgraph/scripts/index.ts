@@ -40,6 +40,9 @@ export const getEstimatedRewardsForUser = async (
     });
   });
 
+  if (totalFeesForPeriod === 0) {
+    return 0;
+  }
   const estimatedUserRewards = (userFeesForPeriod * totalRewardsForPeriod) / totalFeesForPeriod;
-  return Number(estimatedUserRewards);
+  return estimatedUserRewards;
 };
