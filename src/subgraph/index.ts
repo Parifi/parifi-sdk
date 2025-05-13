@@ -33,6 +33,7 @@ import {
   getUserPositionsHistory,
 } from './positions';
 import { status } from '../../test/common/constants';
+import { getEstimatedRewardsForUser } from './scripts';
 
 export * from './common';
 export * from './markets';
@@ -295,5 +296,25 @@ export class Subgraph {
   public getProtocolStats() {
     const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
     return getProtocolStats(subgraphEndpoint);
+  }
+
+  ////////////////////////////////////////////////////////////////
+  ///////////////////////    MISC    /////////////////////////////
+  ////////////////////////////////////////////////////////////////
+
+  public async getEstimatedRewardsForUser(
+    userAddress: string,
+    totalRewardsForPeriod: number,
+    startTimestamp: number,
+    endTimestamp: number,
+  ): Promise<number> {
+    const subgraphEndpoint = this.getSubgraphEndpoint(this.rpcConfig.chainId);
+    return getEstimatedRewardsForUser(
+      subgraphEndpoint,
+      userAddress,
+      totalRewardsForPeriod,
+      startTimestamp,
+      endTimestamp,
+    );
   }
 }
