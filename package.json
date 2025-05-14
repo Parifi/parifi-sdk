@@ -1,6 +1,6 @@
 {
   "name": "@parifi/sdk",
-  "version": "2.2.21",
+  "version": "2.2.24",
   "description": "Parifi SDK with common utility functions",
   "files": [
     "dist",
@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@gelatonetwork/relay-sdk": "^5.5.5",
+    "@openzeppelin/merkle-tree": "^1.0.8",
     "@parifi/references": "1.0.6-prod",
     "@parifi/synthetix-sdk-ts": "^0.2.10-dev",
     "axios": "^1.6.7",
@@ -55,6 +56,6 @@
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "permissionless": "0.1.16",
-    "viem": "2.17.1"
+    "viem": "2.21.55"
   }
 }

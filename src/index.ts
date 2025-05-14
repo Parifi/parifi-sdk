@@ -4,6 +4,7 @@ import { PythConfig, RelayerConfig, RpcConfig, SubgraphConfig } from './interfac
 import { Gelato } from './relayers/gelato';
 import { Perps } from './perps';
 import { Pimlico } from './relayers';
+import { RewardDistribution, RewardList } from './distribution';
 
 export * from './common';
 export * from './relayers/gelato/gelato-function';
@@ -20,12 +21,14 @@ export class ParifiSdk {
     gelato: Gelato;
     pimlico: Pimlico;
   };
+  rewardDistribution: RewardDistribution;
 
   constructor(
     rpcConfig: RpcConfig,
     subgraphConfig: SubgraphConfig,
     relayerConfig: RelayerConfig,
     pythConfig: PythConfig,
+    rewardList?: RewardList,
   ) {
     this.subgraph = new Subgraph(rpcConfig, subgraphConfig, pythConfig);
     this.pyth = new Pyth(pythConfig);
@@ -34,6 +37,7 @@ export class ParifiSdk {
       gelato: new Gelato(relayerConfig['gelatoConfig'], rpcConfig),
       pimlico: new Pimlico(relayerConfig['pimlicoConfig'], rpcConfig, subgraphConfig),
     };
+    this.rewardDistribution = new RewardDistribution(rewardList);
   }
 
   async init() {
