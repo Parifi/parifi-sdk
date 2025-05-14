@@ -1,6 +1,6 @@
 {
   "name": "@parifi/sdk",
-  "version": "2.2.22",
+  "version": "2.2.23",
   "description": "Parifi SDK with common utility functions",
   "files": [
     "dist",
@@ -56,6 +56,6 @@
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "permissionless": "0.1.16",
-    "viem": "^2.17.1"
+    "viem": "2.21.55"
   }
 }
